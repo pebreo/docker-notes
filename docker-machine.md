@@ -4,10 +4,11 @@
 
 dma create -d virtualbox dev1
 
+$ export DO_TOKEN="abcdefghijklmnopqrstuvwxyz"
 
-docker-machine create \
+$ docker-machine create \
 -d digitalocean \
---digitalocean-access-token=xyzabc123 \
+--digitalocean-access-token=${DO_TOKEN} \
 serve1
 
 
