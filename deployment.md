@@ -102,7 +102,7 @@ d service inspect <containerid/name>
 ```
 docker node inspect self --pretty
 docker node inspect agent01 --pretty
-docker node update --availability drain agent01
+docker node update --availability drain agent1
 ```
 
 ### 4. (optional. for local development only) Scale a service (without swarm)
@@ -114,7 +114,7 @@ services:
         image: pebreo/myservice
 # notice there is no ports declaration
 ```
-##### run the command
+###### run the command
 ```
 dc scale myservice=2
 ```
