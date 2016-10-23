@@ -13,7 +13,7 @@ Terminology:
 
 
 ## Educational demo on a local virtualmachine
-#### Step 1. create a discovery machine called local (used only in dev and staging not production)
+### Step 1. create a discovery machine called local (used only in dev and staging not production)
 ```
 dma create -d virtualbox local
 ```
