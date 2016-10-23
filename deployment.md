@@ -10,7 +10,7 @@ Before we start let's talk about how to develop locally
 
 ### 1.Make a swarm (using machines and docker swarm)
 
-####
+#### Create the swarm token using a temporary machine
 ```
 export DO_TOKEN="abc123"
 
@@ -19,14 +19,14 @@ docker-machine create \
   --digitalocean-access-token ${DO_TOKEN} \
   --digitalocean-region "lon1" \
   --digitalocean-size "512mb" \
-  temp-swarm \
+  swarm-1 \
 
-deval temp-swarm
+deval swarm-1
 d run swarm create
 
 export SWARM_TOKEN="xxz"
 
-docker-machine rm temp-swarm
+docker-machine rm swarm1
 ```
 #### Create swarm master (manager)
 ```
@@ -70,7 +70,7 @@ docker-machine ls
 eval $(docker-machine env --swarm swarm-master)
 d info
 ```
-#### add constraints
+#### (optional) add constraints
 ```
 # allow on 400 MB for nginx
 docker run --name <containername> -d -P -m 400M nginx
@@ -84,6 +84,8 @@ dc bundle
 
 cat <myservice>.dab
 
+make sure in dockerhub that your web app is private
+
 # if you haven't created a bundle before
 dc bundle --push-images
 ```
@@ -95,3 +97,5 @@ d deploy dockerizingdjango.dab
 d service ls
 d service inspect <containerid/name>
 ```
+
+source: https://42notes.wordpress.com/2015/04/15/create-manage-a-docker-swarm-cluster-on-digital/
