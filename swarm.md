@@ -10,8 +10,19 @@ and scale up you can use docker swarm to make it easier.
 Terminology:
 * `agent` - nodes (usually host machines) that contain containers
 * `manager` (master) - a machine that supervises the agent machines/containers
-
-
+* A docker service is a set of containers that are launched on your nodes and a certain
+number of contaire are kept running at all times. If one of the container dies it is replaced automatically.
+* You can use constraints and labels to do some very basic scheduling of containers as well
+as constraining resources like memory. For example
+```
+docker service create \
+ -name frontend \
+ -replicas 5 \
+ -network my-network \
+ --consraint engine.labels.cloud==aws
+ --constraint node.role==manager \
+ -p 80:80/tcp nginx:latest
+```
 ## Educational demo on a local virtualmachine
 ### Step 1. create a discovery machine called local (used only in dev and staging not production)
 ```

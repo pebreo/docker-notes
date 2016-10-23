@@ -6,7 +6,7 @@
 Before we start let's talk about how to develop locally
 
 
-## Deployment
+## Deployment using Swarm as Orchestration (not recommend right now, use Rancher instead)
 
 ### 1.Make a swarm (using machines and docker swarm)
 
