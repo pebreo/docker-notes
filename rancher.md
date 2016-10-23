@@ -9,7 +9,13 @@
 
 ##### Provision a `manager` machine
 ```
-dma create -d digitalocean \
+export DO_TOKEN="abc123"
+
+docker-machine create \
+  -d digitalocean \
+  --digitalocean-access-token ${DO_TOKEN} \
+  --digitalocean-size "512mb" \
+  manager 
 ```
 ##### Install Rancher
 
