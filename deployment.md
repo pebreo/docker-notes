@@ -93,9 +93,30 @@ dc bundle --push-images
 ### 3.Deploy bundle to swarm 
 ```
 d node ls
-d deploy dockerizingdjango.dab
+d deploy dockerizingdjango.dab # create a stack from a bundle
 d service ls
 d service inspect <containerid/name>
+```
+
+### 4. (optional) Drain a node (agent) for update
+```
+docker node inspect self --pretty
+docker node inspect agent01 --pretty
+docker node update --availability drain agent01
+```
+
+### 4. (optional. for local development only) Scale a service (without swarm)
+###### before the next command you should remove non-default ports declaration e.g. ports ["50:50"]
+```yaml
+services:
+    myservice:
+        build: /code
+        image: pebreo/myservice
+# notice there is no ports declaration
+```
+##### run the command
+```
+dc scale myservice=2
 ```
 
 source: https://42notes.wordpress.com/2015/04/15/create-manage-a-docker-swarm-cluster-on-digital/
