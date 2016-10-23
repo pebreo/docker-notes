@@ -20,3 +20,8 @@ dma start dev1
 dma ssh dev1
 
 ```
+
+## If you can't connect to the machine
+```
+dma regenerate-certs dev1
+```

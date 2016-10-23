@@ -13,7 +13,6 @@ exit
 ```
 # copy the source path
 d inspect container1  # notice the "Mounts" source path
-
 ```
 #### goto host machine and look at the created file 
 ```
@@ -32,13 +31,13 @@ d attach container1
 ```
 d run -it --name container3 -v `pwd`:/datavol busybox
 ```
-##### share data from one container to another
-#####  and persist data from a non-persistant container
+##### share data from one container to another and persist data from a non-persistant container
 ```
 # first, create the data volume container
-
 d run -it --name datacontainer1 -v /data busybox
-CTRL+P+Q - exit without stopping container
+
+# now, exit without stopping container
+CTRL+P+Q on pc
 CTRL+R+X on mac dvorak
 ```
 #### check the volume if it persisted
@@ -47,25 +46,41 @@ CTRL+R+X on mac dvorak
 d exec container1 ls /data
 
 # second, create another container to mount the volume from datacontainer1
-
 d run -it --volumes-from datacontainer1 --name datacontainer2 busybox
- 
-ls 
+
+# check the shared volume in container2
+d exec container2 ls /data 
 ```
-
-## Backing data from a data volume container
-
+### Part 3: Backing data from a data volume container
 
 #### create a data volume container
 ```
+# create a example postgres container
 d create -v /dbdata --name dbstore training/postgres /bin/true
 ```
 ##### backup the data volume container by creating a temporary container
 ```
-# --rm automatically remove container when exited
-# --volumes-from : attach a volume from another container
-# -v : create a volume for this container, in this case, mount a local volume 
-# image
-# tar compress
 d run --rm --volumes-from dbstore -v `pwd`:/backup ubuntu tar cvf /backup/backup.tar /dbdata
+```
+### the explanation for the above code:
+* `--rm automatically` remove container when exited
+* `--volumes-from` : attach a volume from another container
+* `-v` : create a volume for this container, in this case, mount a local volume 
+* declare which image
+* compress using `tar`
+
+
+# BACKING UP DATA IN DJANGO
+#### dump data on your development machine 
+```
+dc run --rm web /usr/local/bin/python manage.py dumpdata prompt > `pwd`:backup.json
+```
+
+#### to do
+```
+# doesn't work
+d run  -v /data --volumes-from  dockerizingdjango_web_1 dockerizingdjango_web /usr/local/bin/python manage.py dumpdata > /data/backup.json 
+
+d volume ls |grep django-static
+d volume inspect 
 ```
