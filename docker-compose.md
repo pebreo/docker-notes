@@ -3,7 +3,7 @@
 
 ## development workflow
 
-```
+```yaml
 
 dc up -d
 
@@ -17,12 +17,11 @@ dc stop web
 dc rm -f web
 dc up -d web
 
-
-
 ```
 
 ## Typical docker-compose.yml
-```
+```yaml
+
 version: "2"
 
 services:
@@ -95,7 +94,7 @@ volumes:
 
 If you want to autoreload you should use the syntax:
 
-```
+```yaml
   volumes:
       - ./web:/usr/src/app 
 ```
