@@ -25,6 +25,15 @@ cat <myservice>.dab
 dc bundle --push-images
 ```
 
+#### push to a cluster created by Docker swarm
+```
+d node ls
+d deploy dockerizingdjango.dab
+d service ls
+d service inspect <containerid/name>
+```
+
+
 
 # EXAMPLE DOCKER-COMPOSE.YML COMPATIBLE WITH BUNDLES
 ```yaml
