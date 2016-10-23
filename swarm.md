@@ -12,8 +12,8 @@ Terminology:
 * `manager` (master) - a machine that supervises the agent machines/containers
 
 
-# Educational demo on a local virtualmachine
-# Step 1. create a discovery machine called local (used only in dev and staging not production)
+## Educational demo on a local virtualmachine
+#### Step 1. create a discovery machine called local (used only in dev and staging not production)
 ```
 dma create -d virtualbox local
 ```
