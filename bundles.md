@@ -9,6 +9,7 @@ you can ship to staging/production.
 
 You must make changes to your `docker-compose.yml` file in order for it
 to work with docker bundles:
+* create a hub.docker.com account
 * remove volumes
 * add this to each of your service that doesn't have an image defined
 ```
