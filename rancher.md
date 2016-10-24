@@ -1,3 +1,8 @@
+# Rancher
+
+Rancher let's your manager clusters of machines. 
+With Rancher, it is easy to monitor and get statitics on each of your machines.
+
 ### Terminology
 * Environments - e.g. staging, production
 * Hosts - a server (e.g. DigitalOcean droplet or AWS EC2 instance)
