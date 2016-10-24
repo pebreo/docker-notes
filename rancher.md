@@ -16,17 +16,25 @@ With Rancher, it is easy to monitor and get statitics on each of your machines.
 ```
 export DO_TOKEN="abc123"
 
+# it won't start unless it is 1gb machine
 docker-machine create \
   -d digitalocean \
   --digitalocean-access-token ${DO_TOKEN} \
-  --digitalocean-size "512mb" \
-  manager 
+  --digitalocean-size "1gb" \
+  manager1 
 ```
 ##### Install Rancher
 
 ```
 deval manager
-sudo docker run -d --restart=always -p 8080:8080 rancher/server  
+docker run -d --restart=unless-stopped -p 8080:8080 rancher/server
+
+```
+##### Wait a couple minutes for the server : `.... Startup Succeeded, Listening on port...`
+```
+d logs -f <containerid>
+dma ip manager
+goto: http://<SERVER_IP>:8080
 ```
 ##### Add nodes (agents,hosts)
 ```
