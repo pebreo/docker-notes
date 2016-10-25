@@ -83,6 +83,7 @@ networks:
 ```
 
 Sources:
+http://docs.rancher.com/rancher/v1.2/en/quick-start-guide/
 http://jamesdacosta.com/getting-started-with-django-docker-rancher-part-2/
 
 
