@@ -20,10 +20,15 @@ d run -it pebreo/test1 bash
 
 run vs exec vs attach 
 ----------------------
-Run means you start a container based on an image.
-Attach means attach to a running process.
-Exec means you run a new thing in an already running container.
+* Run means you start a container based on an image.
+* Attach means attach to a running process.
+* Exec means you run a new thing in an already running container.
 
+#### d run - start a container based on an image
+```
+d run --rm busybox /bin/echo 'hello world'
+d run -it ubuntu bash
+```
 #### d exec  - run new things in an already running container
 ```
 d run -it ubuntu bash
