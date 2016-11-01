@@ -1,9 +1,10 @@
 # Docker images
 
 
-#### Pulling and updating images
+PULLING AND UPDATING IMAGES
+--------------------------
 ```
-d pull <image tag>
+d pull pebreo/test1
 
 d run -it ubuntu bash
 
