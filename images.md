@@ -18,6 +18,23 @@ d push <tag>
 d run -it pebreo/test1 bash
 ```
 
+CREATE/UPDATE A NEW IMAGE FROM A DOCKERFILE
+-----------------------------------
+#### Make a Dockerfile
+```
+FROM pebreo/djangodocker_web_dev:latest
+
+RUN npm install -g -y gulp-webpack
+```
+Now build the image, tag, and push it to Docker registry.
+```
+cd web
+
+d build -t pebreo/devimage:latest -f base-dev-image-Dockerfile `pwd`
+d push pebreo/devimage:latest
+d images
+```
+
 
 RUN vs. EXEC vs. ATTACH 
 ----------------------
@@ -101,22 +118,7 @@ d attach <containerid>
 
 
 
-MAKE A NEW IMAGE FROM A DOCKERFILE
------------------------------------
-#### Make a Dockerfile
-```
-FROM pebreo/djangodocker_web_dev:latest
 
-RUN npm install -g -y gulp-webpack
-```
-Now build the image, tag, and push it to Docker registry.
-```
-cd web
-
-d build -t pebreo/devimage:latest -f base-dev-image-Dockerfile `pwd`
-d push pebreo/devimage:latest
-d images
-```
 
 
 
