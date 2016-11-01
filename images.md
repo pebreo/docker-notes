@@ -18,7 +18,7 @@ d run -it pebreo/test1 bash
 ```
 
 
-run vs exec vs attach 
+RUN vs. EXEC vs. ATTACH 
 ----------------------
 * Run means you start a container based on an image.
 * Attach means attach to a running process.
@@ -36,22 +36,19 @@ CTRL+R+X
 d ps
 d exec <containerid> /bin/echo 'hello'
 ```
+#### update a container and put in the background
+```
+d exec <containerid> npm install -y 
+```
+
 #### d attach - attach to a running process
+```
 d run -it ubuntu bash
-CTRL+R+X
+# detach from a container
+CTRL+R+X (dvorak)  - CTRL+P+Q (qwerty)
 d attach <containerid>
 ```
 
-Run means you create a container based on an image.
-#### run from an image
-````
-d run busybox /bin/echo 'hello world'
-```
-
-#### run and delete container
-```
-d run --rm busybox /bin/echo 'hello world'
-```
 
 #### run an interactive container
 ```
@@ -62,15 +59,8 @@ d run -it ubuntu bash
 # bash - the command to run
 ```
 
-#### detach from a container without exiting shell
-CTRL+R+X (DVORAK)
-CTRL+P+Q (QWERTY)
-
-#### attach into a container
-```
-d attach <containerid>
-```
-
+PORTS
+------
 #### Run a container with port connection to host
 ```
 d run -d -P training/webapp python app.py
@@ -81,7 +71,8 @@ d run -d -p 80:5000 training/webapp python app.py
 # -p - assign container port 5000 to host port 80
 ```
 
-#### Examine the running container
+EXAMINING A CONTAINER
+----------------------
 ```
 d port <containerid> <exposedport> # check what port the exposed port is mapped to
 d top <containerid>  # examine the running process inside the container
@@ -93,7 +84,8 @@ d start <containerid>
 d rm <containerid>
 ```
 
-#### start a container in background
+START A CONTAINER IN THE BACKGROUND
+------------------------------------
 ```
 d run -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done"
 d ps
@@ -106,10 +98,7 @@ d attach <containerid>
 ```
 
 
-#### update a container and put in the background
-```
-d exec <containerid> npm install -y 
-```
+
 
 MAKE A NEW IMAGE FROM A DOCKERFILE
 -----------------------------------
