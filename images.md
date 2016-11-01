@@ -3,30 +3,38 @@
 
 #### Pulling and updating images
 ```
-d pull
+d pull <image tag>
 
 d run -it ubuntu bash
+
 mkdir data ; cd data ; touch foo.txt 
 exit
+
 # the container id is in the bash terminal of the container
-d commit <containerid> <tag>
+d commit <containerid> pebreo/test1
 d push <tag>
 
 d run -it pebreo/test1 bash
 ```
 
-#### Make an image based on a running container
+
+run vs exec vs attach 
+----------------------
+Run means you start a container based on an image.
+Attach means attach to a running process.
+Exec means you run a new thing in an already running container.
+
+#### d exec  - run new things in an already running container
 ```
-d image
-
-
-d build -t pebreo/myimage:mytag  -f myDockerfile `pwd`
-
-
-d run -p -d busybox mkdir baz ; cat 'hello' > /baz/foo.txt
-d exec -d <containerid> yum apt
-d tag <containerid>  pebreo/myimage:mytag
-d push pebreo/myimage:mytag
+d run -it ubuntu bash
+CTRL+R+X
+d ps
+d exec <containerid> /bin/echo 'hello'
+```
+#### d attach - attach to a running process
+d run -it ubuntu bash
+CTRL+R+X
+d attach <containerid>
 ```
 
 Run means you create a container based on an image.
@@ -95,7 +103,7 @@ d attach <containerid>
 
 #### update a container and put in the background
 ```
-d exec containerid npm install -y 
+d exec <containerid> npm install -y 
 ```
 
 MAKE A NEW IMAGE FROM A DOCKERFILE
@@ -108,10 +116,11 @@ RUN npm install -g -y gulp-webpack
 ```
 Now build the image, tag, and push it to Docker registry.
 ```
-$ cd web
-$ d build -t pebreo/djangodocker_web_dev:latest -f update-Dockerfile `pwd`
-$ d push pebreo/djangodocker_web_dev:latest
-$ d images
+cd web
+
+d build -t pebreo/devimage:latest -f base-dev-image-Dockerfile `pwd`
+d push pebreo/devimage:latest
+d images
 ```
 
 
