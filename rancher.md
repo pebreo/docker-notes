@@ -7,7 +7,7 @@ With Rancher, it is easy to monitor and get statitics on each of your machines.
 * Environments - e.g. staging, production
 * Hosts - a server (e.g. DigitalOcean droplet or AWS EC2 instance)
 * Stacks - a logical collection of services (e.g. frontend, backend)
-* Service - a collection of containers (which you can define in docker-compose.yml)
+* Service - one or more containers of the same image
 
 ### SETUP FOR DIGITALOCEAN
 
@@ -41,8 +41,28 @@ goto: http://<SERVER_IP>:8080
 https://www.digitalocean.com/community/tutorials/how-to-manage-your-multi-node-deployments-with-rancher-and-docker-machine-on-ubuntu-14-04
 ```
 
+### A simple Rancher Deployment
+This deployment will be a basic deployment using:
+* The rancher server will have a agent server on it too
+* The login is local (authentication using login/password)
+* No load balancing
+
+##### Prepare your docker-compose.yml
+* remove nginx container
+* should have django_environ setup
+* should wait for postgres database using special start.sh in web service
+* the stack will not have a load balancer. it will only have web, postgres, 
+
+##### Push your images to docker hub (or docker registry)
+* dc --push-images
 
 
+##### Add a service (container)
+* set the image
+* set the destination service
+* set environment vars
+
+##### 
 
 ### docker-compose.yml 
 ```yaml
