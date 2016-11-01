@@ -49,13 +49,13 @@ This deployment will be a basic deployment using:
 
 ##### Prepare your docker-compose.yml
 * remove nginx container
-* should have django_environ setup
+* should have environ setup
 * should wait for postgres database using special start.sh in web service
 * the stack will not have a load balancer. it will only have web, postgres, 
 
 ##### Push your images to docker hub (or docker registry)
-* dc --push-images
-
+* dc bundle --push-images
+* or, d push pebreo/myimage:mytag
 
 ##### Add a service (container)
 * set the image
