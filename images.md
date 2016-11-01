@@ -3,6 +3,7 @@
 
 PULLING AND UPDATING IMAGES
 --------------------------
+#### Pulling and updating an image
 ```
 d pull pebreo/test1
 
@@ -16,6 +17,20 @@ d commit <containerid> pebreo/test1
 d push <tag>
 
 d run -it pebreo/test1 bash
+```
+#### Image digests
+Image digests are SHA-based strings that are assigned when you use `v2` or `latest`
+keywords in your image tags.
+```
+d run ubuntu bash
+mkdir data ; cd data ; touch foo.txt
+exit
+d commit <containerid> pebreo/test1:v3
+d images --digests |head
+```
+#### Pull an image based on digest value
+```
+d pull pebreo/test1@sha256:f0ef578ebd7e92c1585ca63fa8a2feacc390555e719656a490183d37f892b46d
 ```
 
 CREATE/UPDATE A NEW IMAGE FROM A DOCKERFILE
