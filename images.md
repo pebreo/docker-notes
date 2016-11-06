@@ -68,6 +68,7 @@ d run -it ubuntu bash
 CTRL+R+X
 d ps
 d exec <containerid> /bin/echo 'hello'
+d exec -it <containerid> bash
 ```
 #### update a container and put in the background
 ```
