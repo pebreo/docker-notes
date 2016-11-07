@@ -162,7 +162,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data/
     networks:
-      - db_backend
+      - db_backend # this is just for demo purpose
 
   redis:
     restart: always
