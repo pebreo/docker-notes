@@ -3,7 +3,8 @@
 
 development workflow
 ---------------------
-```yaml
+```bash
+unset ${!DOCKER_*}
 
 dc up -d
 
