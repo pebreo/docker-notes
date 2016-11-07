@@ -69,7 +69,8 @@ A couple of notes about version 1-type compose files:
 * In order to connect services, you need to use `links` declaration.
 * The `expose` declaration, exposes that containers port to other containers.
 * The `ports` declaration, exposes the container ports to the host. For example,
-the declaration `"80:80"` means "host_port:container_port".
+the declaration `"80:80"` means `"host_port:container_port"`.
+* You cannot use `image` and `build` at the same time.
 ```yaml
 
 web:
