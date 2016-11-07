@@ -72,7 +72,6 @@ A couple of notes about version 1-type compose files:
 the declaration `"80:80"` means `"host_port:container_port"`.
 * You cannot use `image` and `build` at the same time.
 ```yaml
-
 web:
   restart: always
   build: ./web
@@ -110,15 +109,15 @@ redis:
 **Version 2-type** `docker-compose.yml` file 
 ---------------------------------------
 A couple notes about version 2-type compose files:
-* All services are in the same `networks` by default.
+* All services are connected to eachother by default: no need to define `networks`.
 * If you want to connect services then you can use the `networks` label.
 For example, if you wanted the `postgres` service to only connect to `web` 
 then you can make a separate network for it called `db_backend`.
 * You can connect to other containers by using the service name of the container you
 want to connect to. For example, from the `web` container you can access `nginx`
 by doing something like: `nc -w 1 -z nginx 8000`
-* The `volumes` declaration means you can define named containers. Those are
-useful because named volumes persiste even after you delete containers that connect to it.
+* The `volumes` declaration means you can define named volumes. Those are
+useful because named volumes persist even after you delete containers that connect to it.
 ```yaml
 version: "2"
 
@@ -170,13 +169,15 @@ services:
     image: redis:latest
     networks:
       - backend
-      
 
+# named volumes persist even after a container that connects to it is deleted      
 volumes:
   django-static:
       driver: local
   pgdata: {}
 
+# use networks to connect/isolate services to/from communicating with eachother
+# by default, all services can connect to eachother without networks being defined
 networks:
   backend: {}
   db_backend: {}
