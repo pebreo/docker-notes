@@ -19,16 +19,21 @@ dc up -d web
 
 ```
 
-IMAGE VS BUILD 
---------------
+IMAGE VS BUILD (IN VERSION 2-TYPE COMPOSE FILES)
+-----------------------------------------------
+The following only applies to version 2-type compose files.
+In version 1-type compose files, you can't have `image` and `build` both defined
+for a service.
+
 Let's say you define your service with `build` and `image` declarations:
 ```yaml
-web:
-  image: pebreo/myapp:latest
-  build: ./web  
+version: "2"
+services:
+  web:
+    image: pebreo/myapp:latest
+    build: ./web  
 ```
-If you have both the `build` and `image` defined, then the the built image
-will be tagged with `pebreo/myapp:latest`, after you run `dc build`.
+In version 2-type compose files, ff you have both the `build` and `image` defined, then the the built image will be tagged with `pebreo/myapp:latest`, after you run `dc build`.
 
 If you only had `build` defined then the image will just be name
 `<currentdir>_<myservicename>`
@@ -49,10 +54,12 @@ And to push to staging/prod you will have to build, tag, and push.
 d build -t pebreo/myapp:staging-0.1 -f staging-Dockerfile `pwd`
 d push pebreo/myapp:staging-0.1
 ```
-#### Finally, update the image version in your staging docker-compose file e.g. `staging.yml`
+##### Finally, update the image version in your staging docker-compose file e.g. `staging.yml`
 ```yaml
-web:  
-  image: pebreo/myapp:staging-0.1
+version: "2"
+services:
+  web:  
+    image: pebreo/myapp:staging-0.1
 ```
 
 
