@@ -80,6 +80,7 @@ web:
     - "8000"
   links:   
     - redis:redis
+    - postgres:postgres
   volumes:
     - ./web:/usr/src/app
   env_file: .env
@@ -105,6 +106,22 @@ redis:
   image: redis:latest
   ports:
     - "6379:6379"
+
+postgres:
+  restart: always
+  image: postgres:9.4
+  volumes_from:
+    - pgdata
+  ports:
+    - "5432:5432"
+
+pgdata:
+  restart: always
+  image: postgres:9.4
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
 ```
 
 **Version 2-type** `docker-compose.yml` file 
