@@ -66,40 +66,28 @@ This deployment will be a basic deployment using:
 
 ### docker-compose.yml 
 ```yaml
-version: "2"
+api:  
+  container_name: api
+  image: jdelight/films_api:0.1.1
+  ports:
+    - "8000:8000"
+  tty: true
+  env_file: .env
+  command: /var/www/app/start.sh
 
-services:  
-  api:
-    container_name: api
-    image: jdelight/films_api
-    build: ./api
-    networks:
-      - backend
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./api:/var/www/app
-    env_file: .env
-    tty: true
-    depends_on:
-      - db
-    command: /var/www/app/start.sh
+db:  
+  container_name: db
+  image: jdelight/films_db:0.1.1
+  env_file: .env
+  volumes:
+    - "dbdata:/var/lib/postgresql/data"
 
-  db:
-    container_name: db
-    image: jdelight/films_db
-    build: ./db
-    networks:
-      - backend
-    env_file: .env
-    volumes:
-      - "dbdata:/var/lib/postgresql/data"
-
-volumes:  
-  dbdata:
-
-networks:  
-  backend:
+lb:  
+  image: rancher/load-balancer-service
+  ports:
+    - 80:8000
+  links:
+    - api:api
 ```
 
 Sources:
