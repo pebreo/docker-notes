@@ -36,6 +36,15 @@ d logs -f <containerid>
 dma ip manager
 goto: http://<SERVER_IP>:8080
 ```
+
+##### Goto Admin and setup local authentication
+* Goto admin -> Access Control 
+* select local authentication
+
+#### Add a host to the manager for testing purposes
+* `dma ssh manager1`
+
+
 ##### Add nodes (agents,hosts)
 ```
 https://www.digitalocean.com/community/tutorials/how-to-manage-your-multi-node-deployments-with-rancher-and-docker-machine-on-ubuntu-14-04
@@ -62,7 +71,13 @@ This deployment will be a basic deployment using:
 * set the destination service
 * set environment vars
 
-##### 
+##### Add the command in Rancher
+For example:
+```
+  environment:
+    DEBUG: 'true'
+  command: /usr/local/bin/python /usr/src/app/app.py 
+```
 
 ### docker-compose.yml 
 ```yaml
@@ -89,6 +104,31 @@ lb:
   links:
     - api:api
 ```
+
+Rancher Compose
+---------------
+Create the keys first by going to API -> Advanced Options 
+then "Add Envirenment API Key"
+```
+export RANCHER_URL=http://server_ip:8080/  
+export RANCHER_ACCESS_KEY=<username>
+export RANCHER_SECRET_KEY=<essentially_the_password>
+export RANCHER_CLIENT_DEBUG=true
+# or the longer way
+
+rancher-compose -f staging.yml --url http://server_ip:8080 \
+--access-key <username>\
+--secret-key <secretkey> \
+up -d
+
+
+rancher-compose --debug up -d 
+
+rancher-compose up myservec1 myservice2 -d
+
+rancher-compose -f staging-0.1.2.yml up --upgrade myservice
+```
+
 
 Sources:
 http://docs.rancher.com/rancher/v1.2/en/quick-start-guide/

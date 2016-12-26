@@ -4,7 +4,7 @@
 development workflow
 ---------------------
 ```bash
-unset ${!DOCKER_*}
+eval $(docker-machine env -u)
 
 dc up -d
 
