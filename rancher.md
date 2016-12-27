@@ -9,8 +9,19 @@ With Rancher, it is easy to monitor and get statitics on each of your machines.
 * Stacks - a logical collection of services (e.g. frontend, backend)
 * Service - one or more containers of the same image
 
-### SETUP FOR DIGITALOCEAN
+In Rancher, you can deploy your app in two ways:
+1) Add the containers individual container images separately
+   This allows you to control what containers are in what hosts
+   and you can connect them using "Links" optional when you create a container
+2) Add whole stacks using rancher-compose. I have not figured out how to constrain
+   which containers go to which hosts with this method though.
 
+SIMPLE RANCHER DEPLOYMENT USING DIGITAL OCEAN
+---------------------------------------------
+This deployment will be a basic deployment using:
+* The rancher server will have a agent server on it too
+* The login is local (authentication using login/password)
+* No load balancing
 
 ##### Provision a `manager` machine
 ```
@@ -50,11 +61,8 @@ goto: http://<SERVER_IP>:8080
 https://www.digitalocean.com/community/tutorials/how-to-manage-your-multi-node-deployments-with-rancher-and-docker-machine-on-ubuntu-14-04
 ```
 
-### A simple Rancher Deployment
-This deployment will be a basic deployment using:
-* The rancher server will have a agent server on it too
-* The login is local (authentication using login/password)
-* No load balancing
+DEPLOYMENT REMINDERS
+---------------------------
 
 ##### Prepare your docker-compose.yml
 * remove nginx container
@@ -62,11 +70,7 @@ This deployment will be a basic deployment using:
 * should wait for postgres database using special start.sh in web service
 * the stack will not have a load balancer. it will only have web, postgres, 
 
-##### Push your images to docker hub (or docker registry)
-* dc bundle --push-images
-* or, d push pebreo/myimage:mytag
-
-##### Add a service (container)
+##### In Rancher, add a service (container)
 * set the image
 * set the destination service
 * set environment vars
@@ -81,51 +85,140 @@ For example:
 
 ### docker-compose.yml 
 ```yaml
-api:  
-  container_name: api
-  image: jdelight/films_api:0.1.1
-  ports:
-    - "8000:8000"
-  tty: true
-  env_file: .env
-  command: /var/www/app/start.sh
+version: '2'
+services:
+  web:
+    image: pebreo/dockerflask_web_staging:0.1.8
+    depends_on:
+      - redis
+    stdin_open: true
+    tty: true
+    ports:
+    - 80:5000/tcp
+    env_file: .env
+    environment:
+      DEBUG: 'false'
+    command: /usr/local/bin/gunicorn -w 2 -b 0.0.0.0:5000 app:app
 
-db:  
-  container_name: db
-  image: jdelight/films_db:0.1.1
-  env_file: .env
-  volumes:
-    - "dbdata:/var/lib/postgresql/data"
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
 
-lb:  
-  image: rancher/load-balancer-service
-  ports:
-    - 80:8000
-  links:
-    - api:api
+volumes:
+  redisdata: {}
+```
+### rancher-compose.yml
+```
+version: '2'
+services:
+  web:
+    scale: 1
+    start_on_create: true
+  redis:
+    scale: 1
+    start_on_create: true
 ```
 
-Rancher Compose
----------------
-Create the keys first by going to API -> Advanced Options 
-then "Add Envirenment API Key"
+INTERMEDIATE RANCHER DEPLOYMENT USING COMPOSE AND UPGRADE
+----------------------------------------------------------
+The overview of steps are:
+* Provision a Rancher server using Digital Ocean
+* Build the app images using `dc-build.py`
+* Push the app images using `dc-build.py <ver> push`
+* Install `rancher-compose` binary to `/usr/local/bin`
+* Create a `rancher-compose.yml` file
+* Deploy using `rancher-compose` command
+
+
+#### Provision Rancher server
 ```
-export RANCHER_URL=http://server_ip:8080/  
-export RANCHER_ACCESS_KEY=<username>
-export RANCHER_SECRET_KEY=<essentially_the_password>
-export RANCHER_CLIENT_DEBUG=true
-# or the longer way
+export DO_TOKEN="abc123"
 
-rancher-compose -f staging.yml --url http://server_ip:8080 \
---access-key <username>\
---secret-key <secretkey> \
-up -d
+# it won't start unless it is 1gb machine
+docker-machine create \
+  -d digitalocean \
+  --digitalocean-access-token ${DO_TOKEN} \
+  --digitalocean-size "1gb" \
+  manager1 
+
+deval manager
+docker run -d --restart=unless-stopped -p 8080:8080 rancher/server
+
+# ... Wait a couple minutes for the server : `.... Startup Succeeded, Listening on port...`
+
+d logs -f <containerid>
+dma ip manager
+goto: http://<SERVER_IP>:8080
+```
+
+#### Install `rancher-compose` binary to `/usr/local/bin`
+* Goto your Rancher manager UI
+* On the bottom-right click on "Download Rancher CLI"
+* Save to Download and untar
+* Goto terminal and move the file to `/usr/local/bin`
 
 
-rancher-compose --debug up -d 
+#### Build and push app images using `dc-build.py`
+```
+python dc-build.py 0.1.5
+python dc-build.py 0.1.5 push
+optional :  export RANCHER_CLIENT_DEBUG=true
+```
 
-rancher-compose up myservec1 myservice2 -d
 
+#### Create a `rancher-compose.yml` file
+```
+version: '2'
+services:
+  web:
+    scale: 1
+    start_on_create: true
+  redis:
+    scale: 1
+    start_on_create: true
+```
+
+#### Deploying using `rancher-compose` command
+
+Create the API keys first by going to API -> Advanced Options 
+then "Add Environment API Key"
+You will need the:
+ * ACCESS KEY (i.e. username)
+ * SECRET KEY (i.e. password)
+```
+rancher-compose -f staging-0.1.7.yml --url http://hostip:8080/ \
+--access-key abc \
+--secret-key xyz \
+-p mystack up -d
+
+```
+
+#### Upgrading
+
+When upgrading, you should increment the version number when 
+you call `dc-build.py`.
+Then you should use the `upgrade` paramater in the `rancher-compose` command
+```
+python dc-build.py 0.1.6
+python dc-build.py 0.1.6 push
+
+rancher-compose -f staging-0.1.8.yml --url http://hostip:8080/ \
+--access-key abc \
+--secret-key xyz \
+-p mystack up --upgrade -d web
+
+
+optional : rancher-compose --debug up -d 
+optional : rancher-compose up myservec1 myservice2 -d
+```
+
+MAKING UPDATES TO YOUR APP USING RANCHER COMPOSE
+------------------------------------------------
+```
 rancher-compose -f staging-0.1.2.yml up --upgrade myservice
 ```
 
