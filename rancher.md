@@ -222,6 +222,19 @@ MAKING UPDATES TO YOUR APP USING RANCHER COMPOSE
 rancher-compose -f staging-0.1.2.yml up --upgrade myservice
 ```
 
+SSH to Rancher Host
+-----------------
+Goto to Infrastructure -> Hosts
+Click on 3-vertical-dots icon
+And click Download Machine Config
+
+Untar that file and you can use the 
+hosts/<machinname>/id_rsa private key file
+
+Then ssh using that private key
+```
+ssh -i id_rsa rancher@$IP_ADDR
+
 
 Sources:
 http://docs.rancher.com/rancher/v1.2/en/quick-start-guide/
