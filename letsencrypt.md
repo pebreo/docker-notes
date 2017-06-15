@@ -101,3 +101,7 @@ docker-machine rm letsencrypt
 ```
 
 https://thisendout.com/2016/04/21/letsencrypt-certificate-generation-with-docker/
+
+http://equinox.one/blog/2016/11/03/set-https-in-nginx-running-in-docker-container-and-update-certs-from-jenkins/
+
+http://www.automationlogic.com/using-lets-encrypt-and-docker-for-automatic-ssl/
