@@ -61,6 +61,9 @@ d create -v /dbdata --name dbstore training/postgres /bin/true
 ##### backup the data volume container by creating a temporary container
 ```
 d run --rm --volumes-from dbstore -v `pwd`:/backup ubuntu tar cvf /backup/backup.tar /dbdata
+working example
+mkdir data
+d run --rm --volumes-from 082d1 -v `pwd`/data:/backup busybox cp /data/db_historical.json /backup
 ```
 ### the explanation for the above code:
 * `--rm automatically` remove container when exited
