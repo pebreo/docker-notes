@@ -65,7 +65,8 @@ d run -it ubuntu bash
 #### d exec  - run new things in an already running container
 ```
 d run -it ubuntu bash
-CTRL+R+X
+CTRL+P then CTRL+Q
+CTRL+R, CTRL+X (in dvorak mode)
 d ps
 d exec <containerid> /bin/echo 'hello'
 d exec -it <containerid> bash
@@ -79,7 +80,7 @@ d exec <containerid> npm install -y
 ```
 d run -it ubuntu bash
 # detach from a container
-CTRL+R+X (dvorak)  - CTRL+P+Q (qwerty)
+CTRL+R, CTRL+X (dvorak)  - CTRL+P, CTRL+Q (qwerty)
 d attach <containerid>
 ```
 
